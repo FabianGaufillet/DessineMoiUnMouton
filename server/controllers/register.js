@@ -34,7 +34,6 @@ const register = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       status: "error",
-      code: 500,
       data: [],
       message: "Erreur interne. Veuillez réessayer ultérieurement.",
     });

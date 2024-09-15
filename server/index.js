@@ -15,7 +15,7 @@ const start = async () => {
     mongoose.set("strictQuery", true);
     await mongoose.connect(MONGODB_URI);
 
-    app.use("/api/user/", user);
+    app.use("/api/user", user);
 
     app.use((error, req, res, next) => {
       res.status(error.status).json(error.message);

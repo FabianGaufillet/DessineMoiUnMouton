@@ -21,8 +21,15 @@ const update = async (req, res) => {
       message: "Vos modifications ont bien été prises en compte.",
     });
   } catch (err) {
-    console.error(err);
+    return res
+      .status(500)
+      .json({
+        status: "error",
+        data: [],
+        message: "Une erreur s'est produite lors de la mise à jour.",
+      });
   }
+  res.end();
 };
 
 export { update };
