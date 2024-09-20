@@ -1,6 +1,6 @@
 import { User } from "../models/user.js";
 
-const register = async (req, res) => {
+const signup = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
   try {
     const newUser = new User({
@@ -25,20 +25,19 @@ const register = async (req, res) => {
     }
     const savedUser = await newUser.save();
     const { role, ...user_data } = savedUser._doc;
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: user_data,
       message:
         "Merci pour votre inscription ! Votre compte a bien été créé. Vous pouvez désormais vous connecter avec vos identifiants.",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       data: [],
       message: "Erreur interne. Veuillez réessayer ultérieurement.",
     });
   }
-  res.end();
 };
 
-export { register };
+export { signup };

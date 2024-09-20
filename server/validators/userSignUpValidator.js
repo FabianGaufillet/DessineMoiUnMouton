@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-const userRegistrationValidator = [
+const userSignUpValidator = [
   body("email")
     .isEmail()
     .withMessage("Veuillez renseigner une adresse mail valide")
@@ -29,4 +29,4 @@ const userRegistrationValidator = [
     ),
 ];
 
-export { userRegistrationValidator };
+export { userSignUpValidator };

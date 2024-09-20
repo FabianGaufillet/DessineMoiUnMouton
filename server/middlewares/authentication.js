@@ -3,19 +3,19 @@ import { JWT_SECRET } from "../config/index.js";
 import { User } from "../models/user.js";
 
 const authentication = async (req, res, next) => {
-  const authorization = req.headers["authorization"],
+  const authHeader = req.headers["cookie"],
     { _id } = req.body;
-  if (!authorization)
+  if (!authHeader)
     return next({
       status: 401,
       message:
         "Vous devez être connecté à votre compte utilisateur pour effectuer cette opération.",
     });
-  const token = authorization.split(" ").at(-1);
+  const cookie = authHeader.split("=").at(-1);
   let decoded;
   try {
-    decoded = jwt.verify(token, JWT_SECRET);
-    const existingUser = await User.findOne({ _id: decoded["_id"] }, {}, {});
+    decoded = jwt.verify(cookie, JWT_SECRET);
+    const existingUser = await User.findById(decoded["_id"], {}, {});
     if (
       (existingUser && _id === decoded["_id"]) ||
       "ADMINISTRATOR" === existingUser["role"]
@@ -27,6 +27,7 @@ const authentication = async (req, res, next) => {
         message: "Vous n'êtes pas autorisé à effectuer cette opération",
       });
   } catch (err) {
+    console.error(err);
     return next({
       status: 401,
       message:
