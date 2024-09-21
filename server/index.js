@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { SERVER_PORT, MONGODB_URI } from "./config/index.js";
 import { router as user } from "./routes/user.js";
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const start = async () => {
   try {

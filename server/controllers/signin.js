@@ -27,18 +27,18 @@ const signin = async (req, res) => {
           "Vos identifiants de connexion ne correspondent à aucun compte sur notre système.",
       });
     }
-    const { password, ...userData } = user._doc;
+    delete user["_doc"]["password"];
     const token = jwt.sign(
       {
-        _id: userData["_id"],
+        _id: user["_doc"]["_id"],
       },
       JWT_SECRET,
       { expiresIn: "3h" },
     );
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("DMUM-token", token, { httpOnly: true });
     return res.status(200).json({
       status: "success",
-      data: userData,
+      data: user["_doc"],
       message: "Connexion réussie ! Contents de vous revoir parmi nous.",
     });
   } catch (err) {

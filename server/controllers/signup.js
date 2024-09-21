@@ -24,18 +24,19 @@ const signup = async (req, res) => {
       });
     }
     const savedUser = await newUser.save();
-    const { role, ...user_data } = savedUser._doc;
+    delete savedUser["_doc"]["role"];
     return res.status(200).json({
       status: "success",
-      data: user_data,
+      data: savedUser["_doc"],
       message:
         "Merci pour votre inscription ! Votre compte a bien été créé. Vous pouvez désormais vous connecter avec vos identifiants.",
     });
-  } catch (error) {
+  } catch (err) {
+    console.error(err);
     return res.status(500).json({
       status: "error",
       data: [],
-      message: "Erreur interne. Veuillez réessayer ultérieurement.",
+      message: "Erreur interne au serveur. Veuillez réessayer ultérieurement.",
     });
   }
 };
