@@ -1,0 +1,11 @@
+<form [formGroup]="loginForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Nom d'utilisateur</mat-label>
+    <input matInput placeholder="Votre nom d'utilisateur" formControlName="username">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Mot de passe</mat-label>
+    <input matInput placeholder="Votre mot de passe" formControlName="password">
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Se connecter</button>
+</form>
