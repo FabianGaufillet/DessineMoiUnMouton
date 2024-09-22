@@ -11,8 +11,8 @@ import {
 import { MatButton } from '@angular/material/button';
 import { take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SignUpService } from '../sign-up.service';
 import { NotificationComponent } from '../notification/notification.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -30,7 +30,7 @@ import { NotificationComponent } from '../notification/notification.component';
 })
 export class SignUpComponent {
   snackBar = inject(MatSnackBar);
-  signUpService = inject(SignUpService);
+  authService = inject(AuthService);
 
   durationInSeconds = 3;
   errorMessage = '';
@@ -54,7 +54,7 @@ export class SignUpComponent {
 
   onSubmit() {
     if (this.signUpForm.valid) {
-      this.signUpService
+      this.authService
         .signup({
           last_name: this.signUpForm.controls.lastName.value,
           first_name: this.signUpForm.controls.firstName.value,

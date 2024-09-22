@@ -9,10 +9,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { SignInService } from '../sign-in.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
 import { take } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -31,7 +31,7 @@ import { take } from 'rxjs';
 })
 export class SignInComponent {
   snackBar = inject(MatSnackBar);
-  signInService = inject(SignInService);
+  authService = inject(AuthService);
   signInFormBuilder = new FormBuilder().nonNullable;
 
   durationInSeconds = 3;
@@ -42,22 +42,18 @@ export class SignInComponent {
     password: ['', [Validators.required]],
   });
 
-  onSubmit() {
+  async onSubmit() {
     if (this.signInForm.valid) {
-      this.signInService
-        .signin({
+      try {
+        const response: any = await this.authService.signin({
           email: this.signInForm.controls.email.value,
           password: this.signInForm.controls.password.value,
-        })
-        .pipe(take(1))
-        .subscribe({
-          next: (result: any) => {
-            this.errorMessage = '';
-            this.notify(result['message']);
-          },
-          error: (result) => (this.errorMessage = result['error']['message']),
-          complete: () => {},
         });
+        this.errorMessage = '';
+        this.notify(response['message']);
+      } catch (err: any) {
+        this.errorMessage = err.message;
+      }
     }
   }
 
