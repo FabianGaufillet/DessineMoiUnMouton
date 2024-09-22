@@ -11,4 +11,8 @@ mat-form-field, button {
   min-width: 300px;
 }
 
+span {
+  margin-top: 2rem;
+}
+
 /*# sourceMappingURL=sign-up.component.css.map */

@@ -1,11 +1,40 @@
-<form [formGroup]="loginForm">
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="outline">
-    <mat-label>Nom d'utilisateur</mat-label>
-    <input matInput placeholder="Votre nom d'utilisateur" formControlName="username">
+    <mat-label>Nom</mat-label>
+    <input matInput placeholder="Votre nom" formControlName="lastName">
+    @if (lastName?.touched && lastName?.errors?.["required"]) {
+      <mat-error>Ce champ est requis</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Prénom</mat-label>
+    <input matInput placeholder="Votre prénom" formControlName="firstName">
+    @if (firstName?.touched && firstName?.errors?.["required"]) {
+      <mat-error>Ce champ est requis</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>E-mail</mat-label>
+    <input matInput placeholder="Votre e-mail" formControlName="email">
+    @if (email?.touched && email?.errors?.["required"]) {
+      <mat-error>Ce champ est requis</mat-error>
+    } @else if (email?.touched && email?.errors?.["email"]) {
+      <mat-error>Adresse mail invalide</mat-error>
+    }
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Mot de passe</mat-label>
     <input matInput placeholder="Votre mot de passe" formControlName="password">
+    @if (password?.touched && password?.errors?.["required"]) {
+      <mat-error>Ce champ est requis</mat-error>
+    } @else if (password?.touched && password?.errors?.["pattern"]) {
+      <mat-error>Le mot de passe doit contenir au moins 8 caractères, une minuscule, une majuscule, un chiffre et un caractère spécial parmi (&#64;, $, !, %, *, ?, &)</mat-error>
+    }
   </mat-form-field>
-  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">S'inscrire</button>
+  <button mat-raised-button color="primary" type="submit" [disabled]="signUpForm.invalid">S'inscrire</button>
+  @if(errorMessage) {
+    <span>
+      <mat-error>{{ errorMessage }}</mat-error>
+    </span>
+  }
 </form>

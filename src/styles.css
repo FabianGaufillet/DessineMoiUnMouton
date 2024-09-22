@@ -7,9 +7,4 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-app-login-tabs .mat-mdc-tab-body-wrapper {
-  height: 100%;
-  align-items: center;
-}
-
 /*# sourceMappingURL=styles.css.map */
