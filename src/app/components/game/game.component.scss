@@ -1,0 +1,41 @@
+div.flex {
+  display: flex;
+}
+
+section {
+  width: 50%;
+  height: 94vh;
+}
+
+section#discussion {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+section#dessin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section#dessin > h2 {
+  height: 5%;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+div.messages {
+  height: 90%;
+  overflow-y: auto;
+}
+
+div.input {
+  height: 10%;
+}
+
+.full-width {
+  width: 100%;
+}

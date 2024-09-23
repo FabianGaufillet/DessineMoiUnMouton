@@ -1,0 +1,23 @@
+<div class="flex">
+  <section id="discussion">
+    <div class="messages">
+      @for (message of chatMessages; track message) {
+        <p>{{ message }}</p>
+      }
+    </div>
+    <div class="input">
+      <form [formGroup]="chatForm">
+        <mat-form-field class="full-width">
+          <mat-label>Message</mat-label>
+          <input matInput #message maxlength="256" placeholder="Ex. Bonjour à tous !" (keyup)="sendMessage($event)" formControlName="messageFromChat">
+          <mat-hint align="start"><strong>Ne donnez aucune information personnelle</strong> </mat-hint>
+          <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+        </mat-form-field>
+      </form>
+    </div>
+  </section>
+  <section id="dessin">
+    <canvas #gameCanvas width="700" height="700" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)" (mouseout)="stopDrawing($event)" onBlur=""></canvas>
+  </section>
+</div>
+

@@ -1,4 +1,4 @@
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group animationDuration="0ms" #tabGroup>
   <mat-tab label="Présentation">
     TODO : présenter le jeu
   </mat-tab>
@@ -8,11 +8,8 @@
   <mat-tab label="Connexion" [disabled]="userConnected">
     <app-sign-in></app-sign-in>
   </mat-tab>
-  <mat-tab label="Rejoindre une partie" [disabled]="!userConnected">
-    TODO : Créer ou rejoindre une partie
-  </mat-tab>
-  <mat-tab label="Partie en cours" [disabled]="!userConnected">
-    TODO : Partie en cours qu'on a créée ou rejointe
+  <mat-tab label="Jouer !" [disabled]="userConnected">
+    <app-game></app-game>
   </mat-tab>
   <mat-tab label="Classement général" [disabled]="!userConnected">
     TODO : Classement général des utilisateurs
