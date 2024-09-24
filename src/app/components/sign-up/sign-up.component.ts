@@ -9,7 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
 import { AuthService } from '../../services/auth.service';
@@ -52,24 +51,20 @@ export class SignUpComponent {
     ],
   });
 
-  onSubmit() {
+  async onSubmit() {
     if (this.signUpForm.valid) {
-      this.authService
-        .signup({
+      try {
+        const response: any = await this.authService.signup({
           last_name: this.signUpForm.controls.lastName.value,
           first_name: this.signUpForm.controls.firstName.value,
           email: this.signUpForm.controls.email.value,
           password: this.signUpForm.controls.password.value,
-        })
-        .pipe(take(1))
-        .subscribe({
-          next: (result: any) => {
-            this.errorMessage = '';
-            this.notify(result['message']);
-          },
-          error: (result) => (this.errorMessage = result['error']['message']),
-          complete: () => {},
         });
+        this.errorMessage = '';
+        this.notify(response['message']);
+      } catch (err: any) {
+        this.errorMessage = err.message;
+      }
     }
   }
 

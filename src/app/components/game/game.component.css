@@ -15,6 +15,7 @@ section#discussion {
 
 section#dessin {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

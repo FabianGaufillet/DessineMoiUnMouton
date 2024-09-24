@@ -8,7 +8,7 @@
   <mat-tab label="Connexion" [disabled]="userConnected">
     <app-sign-in></app-sign-in>
   </mat-tab>
-  <mat-tab label="Jouer !" [disabled]="userConnected">
+  <mat-tab label="Jouer !" [disabled]="!userConnected">
     <app-game></app-game>
   </mat-tab>
   <mat-tab label="Classement général" [disabled]="!userConnected">

@@ -1,7 +1,7 @@
 <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="outline">
     <mat-label>E-mail</mat-label>
-    <input matInput placeholder="Votre e-mail" formControlName="email">
+    <input type="email" matInput placeholder="Votre e-mail" formControlName="email">
     @if (email?.touched && email?.errors?.["required"]) {
       <mat-error>Ce champ est requis</mat-error>
     } @else if (email?.touched && email?.errors?.["email"]) {
@@ -10,7 +10,7 @@
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Mot de passe</mat-label>
-    <input matInput placeholder="Votre mot de passe" formControlName="password">
+    <input type="password" matInput placeholder="Votre mot de passe" formControlName="password">
     @if (password?.touched && password?.errors?.["required"]) {
       <mat-error>Ce champ est requis</mat-error>
     }

@@ -17,6 +17,11 @@
     </div>
   </section>
   <section id="dessin">
+    @if (!remainingTime) {
+      <p>Aucune partie en cours !</p>
+    } @else {
+      <p>Temps restant : {{ remainingTime }} s</p>
+    }
     <canvas #gameCanvas width="700" height="700" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)" (mouseout)="stopDrawing($event)" onBlur=""></canvas>
   </section>
 </div>

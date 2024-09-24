@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
 import { take } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -32,6 +33,7 @@ import { AuthService } from '../../services/auth.service';
 export class SignInComponent {
   snackBar = inject(MatSnackBar);
   authService = inject(AuthService);
+  userService = inject(UserService);
   signInFormBuilder = new FormBuilder().nonNullable;
 
   durationInSeconds = 3;
@@ -49,6 +51,12 @@ export class SignInComponent {
           email: this.signInForm.controls.email.value,
           password: this.signInForm.controls.password.value,
         });
+        this.userService.user = {
+          _id: response.data['_id'],
+          first_name: response.data['first_name'],
+          last_name: response.data['last_name'],
+          email: response.data['email'],
+        };
         this.errorMessage = '';
         this.notify(response['message']);
       } catch (err: any) {

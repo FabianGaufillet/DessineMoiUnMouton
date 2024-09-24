@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { WebsocketService } from '../../services/websocket.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-game',
@@ -32,12 +33,14 @@ import { Subscription } from 'rxjs';
   styleUrl: './game.component.scss',
 })
 export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
+  userService = inject(UserService);
   websocketService = inject(WebsocketService);
-  subscription!: Subscription;
+  subscription: Subscription[] = [];
   chatMessages: string[] = [];
 
   @ViewChild('gameCanvas') gameCanvas?: ElementRef<HTMLCanvasElement>;
   context?: CanvasRenderingContext2D | null;
+  remainingTime: number | null = null;
   isDrawing = false;
   x = 0;
   y = 0;
@@ -49,11 +52,19 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor() {}
 
   ngOnInit() {
-    this.subscription = this.websocketService
-      .onMessage('chat')
-      .subscribe((message: string) => {
+    this.subscription.push(
+      this.websocketService.onMessage('chat').subscribe((message: string) => {
         this.chatMessages.push(message);
-      });
+      }),
+      this.websocketService.onMessage('draw').subscribe((data: any) => {
+        this.drawLine(this.context, data.x, data.y, data.offsetX, data.offsetY);
+      }),
+      this.websocketService
+        .onMessage('remainingTime')
+        .subscribe((time: number) => {
+          this.remainingTime = time > 0 ? time : null;
+        }),
+    );
   }
 
   ngAfterViewInit() {
@@ -64,16 +75,16 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription.forEach((sub) => sub.unsubscribe());
     this.websocketService.disconnect();
   }
 
   sendMessage(event: KeyboardEvent) {
     if (event.code === 'Enter' && this.chatForm.valid) {
-      this.websocketService.sendMessage(
-        'chat',
-        this.chatForm.get('messageFromChat')?.value,
-      );
+      this.websocketService.sendMessage('chat', {
+        user: this.userService.user,
+        chatMessage: this.chatForm.get('messageFromChat')?.value,
+      });
       this.chatForm.reset();
     }
   }
@@ -86,14 +97,24 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
   draw(event: MouseEvent) {
     if (!this.isDrawing) return;
-    this.drawLine(this.context, this.x, this.y, event.offsetX, event.offsetY);
+    this.websocketService.sendMessage('draw', {
+      x: this.x,
+      y: this.y,
+      offsetX: event.offsetX,
+      offsetY: event.offsetY,
+    });
     this.x = event.offsetX;
     this.y = event.offsetY;
   }
 
   stopDrawing(event: MouseEvent) {
     if (!this.isDrawing) return;
-    this.drawLine(this.context, this.x, this.y, event.offsetX, event.offsetY);
+    this.websocketService.sendMessage('draw', {
+      x: this.x,
+      y: this.y,
+      offsetX: event.offsetX,
+      offsetY: event.offsetY,
+    });
     this.x = 0;
     this.y = 0;
     this.isDrawing = false;

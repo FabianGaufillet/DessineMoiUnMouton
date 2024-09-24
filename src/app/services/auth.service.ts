@@ -40,9 +40,30 @@ export class AuthService {
     }
   }
 
-  signup(credentials: SignUpCredentials) {
-    return this.http.post(`${this.apiUrl}/signup`, credentials, {
-      withCredentials: true,
-    });
+  async signup(credentials: SignUpCredentials) {
+    try {
+      return await firstValueFrom(
+        this.http.post(`${this.apiUrl}/signup`, credentials, {
+          withCredentials: true,
+        }),
+      );
+    } catch (err: any) {
+      return Promise.reject(new Error(err.error.message));
+    }
+  }
+
+  async reconnect() {
+    try {
+      const response = await firstValueFrom(
+        this.http.post(`${this.apiUrl}/reconnect`, '', {
+          withCredentials: true,
+        }),
+      );
+      this.isLoggedIn.set(true);
+      return response;
+    } catch (err: any) {
+      this.isLoggedIn.set(false);
+      return Promise.reject(new Error(err.error.message));
+    }
   }
 }
