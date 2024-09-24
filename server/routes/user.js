@@ -8,12 +8,14 @@ import { signin } from "../controllers/signin.js";
 import { logout } from "../controllers/logout.js";
 import { remove } from "../controllers/remove.js";
 import { userSignUpValidator } from "../validators/userSignUpValidator.js";
+import { reconnect } from "../controllers/reconnect.js";
 
 const router = express.Router();
 
 router.get("/", authentication, users);
 router.post("/signup", ...userSignUpValidator, validate, signup);
 router.post("/signin", signin);
+router.post("/reconnect", reconnect);
 router.put("/update", authentication, ...userSignUpValidator, validate, update);
 router.get("/logout", logout);
 router.delete("/", authentication, remove);

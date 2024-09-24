@@ -36,6 +36,7 @@ const signin = async (req, res) => {
       { expiresIn: "3h" },
     );
     res.cookie("DMUM-token", token, { httpOnly: true });
+    res.cookie("DMUM-authenticated", true);
     return res.status(200).json({
       status: "success",
       data: user["_doc"],
