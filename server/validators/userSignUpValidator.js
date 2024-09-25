@@ -3,8 +3,7 @@ import { body } from "express-validator";
 const userSignUpValidator = [
   body("email")
     .isEmail()
-    .withMessage("Veuillez renseigner une adresse mail valide")
-    .normalizeEmail(),
+    .withMessage("Veuillez renseigner une adresse mail valide"),
   body("first_name")
     .notEmpty()
     .withMessage("Veuillez renseigner votre prénom")

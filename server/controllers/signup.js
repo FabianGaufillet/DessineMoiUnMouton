@@ -1,4 +1,6 @@
 import { User } from "../models/user.js";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/index.js";
 
 const signup = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
@@ -24,12 +26,21 @@ const signup = async (req, res) => {
       });
     }
     const savedUser = await newUser.save();
+    const token = jwt.sign(
+      {
+        _id: savedUser["_doc"]["_id"],
+      },
+      JWT_SECRET,
+      { expiresIn: "3h" },
+    );
+    res.cookie("DMUM-token", token, { httpOnly: true });
+    res.cookie("DMUM-authenticated", true);
+
     delete savedUser["_doc"]["role"];
     return res.status(200).json({
       status: "success",
       data: savedUser["_doc"],
-      message:
-        "Merci pour votre inscription ! Votre compte a bien été créé. Vous pouvez désormais vous connecter avec vos identifiants.",
+      message: "Merci pour votre inscription ! Votre compte a bien été créé.",
     });
   } catch (err) {
     console.error(err);

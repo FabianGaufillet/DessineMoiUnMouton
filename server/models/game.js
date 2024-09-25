@@ -23,6 +23,9 @@ const GameSchema = new mongoose.Schema(
     winners: {
       type: [String],
     },
+    expiration_time: {
+      type: Number,
+    },
   },
   { timestamps: true },
 );

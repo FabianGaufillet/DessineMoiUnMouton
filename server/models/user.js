@@ -26,6 +26,16 @@ const UserSchema = new mongoose.Schema(
       select: false,
       maxLength: 255,
     },
+    points: {
+      type: Number,
+      required: [true, "Veuillez renseigner le nombre de points"],
+      default: 0,
+    },
+    playing_time: {
+      type: Number,
+      required: [true, "Veuillez renseigner le temps de jeu"],
+      default: 0,
+    },
     role: {
       type: String,
       required: [true, "Le rôle de l'utilisateur est requis."],
