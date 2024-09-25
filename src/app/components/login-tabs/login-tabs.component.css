@@ -2,4 +2,8 @@ mat-tab {
   height: 10vh;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=login-tabs.component.css.map */

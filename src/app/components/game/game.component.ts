@@ -36,7 +36,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   userService = inject(UserService);
   websocketService = inject(WebsocketService);
   subscription: Subscription[] = [];
-  chatMessages: string[] = [];
+  chatMessages: any[] = [];
 
   @ViewChild('gameCanvas') gameCanvas?: ElementRef<HTMLCanvasElement>;
   context?: CanvasRenderingContext2D | null;
@@ -53,8 +53,12 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.subscription.push(
-      this.websocketService.onMessage('chat').subscribe((message: string) => {
-        this.chatMessages.push(message);
+      this.websocketService.onMessage('chat').subscribe((data: any) => {
+        this.chatMessages.push({
+          id: this.chatMessages.length,
+          message: data['message'],
+          class: data['class'],
+        });
       }),
       this.websocketService.onMessage('draw').subscribe((data: any) => {
         this.drawLine(this.context, data.x, data.y, data.offsetX, data.offsetY);

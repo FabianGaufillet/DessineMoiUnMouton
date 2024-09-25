@@ -1,6 +1,18 @@
-<mat-tab-group animationDuration="0ms" #tabGroup>
+<mat-tab-group animationDuration="500ms" (selectedTabChange)="onTabChange($event)" #tabGroup>
   <mat-tab label="Présentation">
-    TODO : présenter le jeu
+    <h2>Concept</h2>
+    <p class="bold">Marre des jeux qui durent trois plombes ? Envie de vous creuser les méninges sans vous prendre la tête ?</p>
+    <p>Découvrez vite notre version simplifiée du Pictionary, le jeu où le dessin est roi (même si vous dessinez comme un pied !).  Un joueur prend le crayon, les autres devinent... et c'est parti pour un fou rire général ! Le premier à trouver la bonne réponse remporte un max de points,  alors ouvrez l'oeil et aiguisez vos crayons !</p>
+    <p><span class="bold">Simple, rapide et hilarant : </span>les parties s'enchaînent à toute vitesse,  parfait pour les petits moments d'ennui ou les soirées endiablées.</p>
+    <p>Alors, prêts à libérer l'artiste qui sommeille en vous (même si c'est un artiste un peu bizarre) ?</p>
+    <h2>Comment jouer ?</h2>
+    Servez-vous du tchat pour gérer vos parties.
+    <ul>
+      <li><span class="bold">/d [mot]</span> : lancer une partie où vous êtes le dessinateur et essayez de faire deviner le mot [mot] aux autres joueurs</li>
+      <li><span class="bold">/j</span> : rejoindre la prochaine partie</li>
+      <li><span class="bold">/q</span> : se désinscrire de la prochaine partie</li>
+      <li><span class="bold">/w [mot]</span> : proposer le mot [mot]</li>
+    </ul>
   </mat-tab>
   <mat-tab label="Inscription" [disabled]="userConnected">
     <app-sign-up></app-sign-up>
@@ -12,9 +24,6 @@
     <app-game></app-game>
   </mat-tab>
   <mat-tab label="Classement général" [disabled]="!userConnected">
-    TODO : Classement général des utilisateurs
-  </mat-tab>
-  <mat-tab label="Mon compte" [disabled]="!userConnected">
-    TODO : Gestion du compte utilisateur
+    <app-leaderboard [data]="data"></app-leaderboard>
   </mat-tab>
 </mat-tab-group>

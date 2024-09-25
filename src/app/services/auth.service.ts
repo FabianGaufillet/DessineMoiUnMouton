@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 interface SignInCredentials {
   email: string;
@@ -42,11 +42,13 @@ export class AuthService {
 
   async signup(credentials: SignUpCredentials) {
     try {
-      return await firstValueFrom(
+      const response = await firstValueFrom(
         this.http.post(`${this.apiUrl}/signup`, credentials, {
           withCredentials: true,
         }),
       );
+      this.isLoggedIn.set(true);
+      return response;
     } catch (err: any) {
       return Promise.reject(new Error(err.error.message));
     }

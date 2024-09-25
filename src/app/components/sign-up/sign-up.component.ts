@@ -12,6 +12,7 @@ import { MatButton } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -30,6 +31,7 @@ import { AuthService } from '../../services/auth.service';
 export class SignUpComponent {
   snackBar = inject(MatSnackBar);
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   durationInSeconds = 3;
   errorMessage = '';
@@ -60,6 +62,12 @@ export class SignUpComponent {
           email: this.signUpForm.controls.email.value,
           password: this.signUpForm.controls.password.value,
         });
+        this.userService.user = {
+          _id: response.data['_id'],
+          first_name: response.data['first_name'],
+          last_name: response.data['last_name'],
+          email: response.data['email'],
+        };
         this.errorMessage = '';
         this.notify(response['message']);
       } catch (err: any) {
