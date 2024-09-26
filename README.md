@@ -31,14 +31,14 @@ Le jeu contient un **mécanisme de score**. Le score de chaque joueur est enregi
 Pour répondre au cahier des charges, j'ai choisi d'utiliser la stack **MEAN** (MongoDB, ExpressJS, Angular, NodeJS).
 
 ### Lancement du site en local
-Pour lancer le site, se rendre dans le répertoire _server_, ajouter un fichier _.env_ en renseignant les informations suivantes :
+Pour lancer le site, se rendre à la racine du projet, ajouter un fichier _.env_ en renseignant les informations suivantes :
 ```
 URL = <url du site> (ex: http://localhost:4200)
 SERVER_PORT = <port du serveur expressJS> (ex: 3000)
 MONGODB_URI = <identifiant de connexion à la base de données avec nom de la base de données> (ex : mongodb://localhost:27017/dmum-db)
 JWT_SECRET = <clé secrète pour les tokens>
 ```
-Puis exécuter les commandes suivantes dans un terminal pour démarrer le serveur :
+Se rendre ensuite dans le répertoire _server_ et exécuter les commandes suivantes dans un terminal pour démarrer le serveur :
 ```
 npm install
 npm start
