@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface SignInCredentials {
   email: string;
@@ -18,7 +19,7 @@ interface SignUpCredentials {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl: string = 'http://localhost:3000/api/user';
+  private apiUrl: string = environment.apiUrl;
   private http: HttpClient = inject(HttpClient);
 
   isLoggedIn = signal<boolean>(false);

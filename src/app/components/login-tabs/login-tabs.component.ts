@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { GameComponent } from '../game/game.component';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../../services/user.service';
-import { LeaderboardComponent } from '../../leaderboard/leaderboard.component';
+import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
 
 @Component({
   selector: 'app-login-tabs',

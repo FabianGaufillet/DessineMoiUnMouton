@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   ElementRef,
@@ -32,13 +33,16 @@ import { UserService } from '../../services/user.service';
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
-export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
+export class GameComponent
+  implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked
+{
   userService = inject(UserService);
   websocketService = inject(WebsocketService);
   subscription: Subscription[] = [];
   chatMessages: any[] = [];
 
   @ViewChild('gameCanvas') gameCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('chatContainer') chatContainer?: ElementRef<HTMLDivElement>;
   context?: CanvasRenderingContext2D | null;
   remainingTime: number | null = null;
   isDrawing = false;
@@ -66,7 +70,13 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
       this.websocketService
         .onMessage('remainingTime')
         .subscribe((time: number) => {
-          this.remainingTime = time > 0 ? time : null;
+          if (time > 0) {
+            if (time === 180) this.context?.clearRect(0, 0, 700, 700);
+            this.remainingTime = time;
+          } else {
+            this.remainingTime = null;
+            this.context?.clearRect(0, 0, 700, 700);
+          }
         }),
     );
   }
@@ -81,6 +91,13 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.subscription.forEach((sub) => sub.unsubscribe());
     this.websocketService.disconnect();
+  }
+
+  ngAfterViewChecked() {
+    if (this.chatContainer) {
+      this.chatContainer.nativeElement.scrollTop =
+        this.chatContainer.nativeElement.scrollHeight;
+    }
   }
 
   sendMessage(event: KeyboardEvent) {
@@ -102,6 +119,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   draw(event: MouseEvent) {
     if (!this.isDrawing) return;
     this.websocketService.sendMessage('draw', {
+      user: this.userService.user,
       x: this.x,
       y: this.y,
       offsetX: event.offsetX,
@@ -114,6 +132,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   stopDrawing(event: MouseEvent) {
     if (!this.isDrawing) return;
     this.websocketService.sendMessage('draw', {
+      user: this.userService.user,
       x: this.x,
       y: this.y,
       offsetX: event.offsetX,

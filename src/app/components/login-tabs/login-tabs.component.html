@@ -13,6 +13,13 @@
       <li><span class="bold">/q</span> : se désinscrire de la prochaine partie</li>
       <li><span class="bold">/w [mot]</span> : proposer le mot [mot]</li>
     </ul>
+    Avant de lancer une partie via la commande <span class="bold">/d</span>, les joueurs doivent rejoindre la prochaine session via la commande <span class="bold">/j</span>.
+    Chaque partie dure au maximum 3 minutes sauf si tous les participants trouvent le mot que le dessinateur a tenté de faire deviner. Dans cette situation, la partie s'arrête.
+    <h2>Répartition des points</h2>
+    <ul>
+      <li>Pour le dessinateur : À chaque fois qu'un joueur parvient à deviner le mot recherché, le dessinateur gagne un nombre de points équivalent à la moitié du temps restant.</li>
+      <li>Pour les joueurs : Dès qu'un joueur trouve le mot recherché, il remporte un nombre de points équivalent à la moitié du temps restant, il a donc tout intérêt à faire un maximum de propositions.</li>
+    </ul>
   </mat-tab>
   <mat-tab label="Inscription" [disabled]="userConnected">
     <app-sign-up></app-sign-up>

@@ -1,6 +1,6 @@
 <div class="flex">
   <section id="discussion">
-    <div class="messages">
+    <div class="messages" #chatContainer>
       @for (chatMessage of chatMessages; track chatMessage.id) {
         <p class="{{ chatMessage.class }}">{{ chatMessage.message }}</p>
       }
