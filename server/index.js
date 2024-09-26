@@ -7,10 +7,17 @@ import { URL, SERVER_PORT, MONGODB_URI } from "./config/index.js";
 import { router as user } from "./routes/user.js";
 import { handleMessage } from "./utils/handleMessage.js";
 import { stopGame } from "./utils/handleGame.js";
+import * as path from "node:path";
 
+const __dirname = import.meta.dirname;
 const app = express();
 
 app.use(cors({ origin: URL, credentials: true }));
+app.use(
+  express.static(
+    path.join(__dirname, "/../dist/dessine-moi-un-mouton/browser"),
+  ),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -21,6 +28,15 @@ const start = async () => {
     await mongoose.connect(MONGODB_URI);
 
     app.use("/api/user", user);
+
+    app.get("*", (req, res) => {
+      res.sendFile(
+        path.join(
+          __dirname,
+          "/../dist/dessine-moi-un-mouton/browser/index.html",
+        ),
+      );
+    });
 
     app.use((error, req, res, next) => {
       res.status(error.status).json(error);
