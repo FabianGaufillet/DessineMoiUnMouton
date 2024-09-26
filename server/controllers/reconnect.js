@@ -31,10 +31,12 @@ const reconnect = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
+    res.clearCookie("DMUM-token", { httpOnly: true });
+    res.clearCookie("DMUM-authenticated");
+    return res.status(401).json({
       status: "error",
       data: [],
-      message: "Erreur interne. Veuillez réessayer ultérieurement.",
+      message: "Vous n'êtes pas autorisé à effectuer cette opération",
     });
   }
 };

@@ -23,7 +23,7 @@ const start = async () => {
     app.use("/api/user", user);
 
     app.use((error, req, res, next) => {
-      res.status(error.status).json(error.message);
+      res.status(error.status).json(error);
     });
 
     return app.listen({ port: SERVER_PORT }, () => {
@@ -42,15 +42,18 @@ const start = async () => {
   const gameDuration = 180;
   let remainingTime = gameDuration;
   let intervalID = null;
+  let drawer = null;
 
   const onChat = async (data) => {
     const result = await handleMessage(data);
     if (result.action === "launchGame" && !intervalID) {
       remainingTime = gameDuration;
+      drawer = result.drawer;
       intervalID = setInterval(async () => {
-        io.emit("remainingTime", --remainingTime);
+        io.emit("remainingTime", remainingTime--);
         if (remainingTime === 0) {
           clearInterval(intervalID);
+          drawer = null;
           intervalID = null;
           await stopGame();
           io.emit("chat", {
@@ -61,6 +64,7 @@ const start = async () => {
       }, 1000);
     } else if (result.action === "stopGame") {
       clearInterval(intervalID);
+      drawer = null;
       intervalID = null;
       remainingTime = 0;
       await stopGame();
@@ -78,6 +82,8 @@ const start = async () => {
 
   io.on("connection", (socket) => {
     socket.on("chat", async (data) => onChat(data));
-    socket.on("draw", (data) => io.emit("draw", data));
+    socket.on("draw", (data) => {
+      if (!drawer || data["user"]["_id"] === drawer) io.emit("draw", data);
+    });
   });
 })();

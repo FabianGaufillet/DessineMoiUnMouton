@@ -12,7 +12,7 @@ import { reconnect } from "../controllers/reconnect.js";
 
 const router = express.Router();
 
-router.post("/", users);
+router.get("/", users);
 router.post("/signup", ...userSignUpValidator, validate, signup);
 router.post("/signin", signin);
 router.post("/reconnect", reconnect);

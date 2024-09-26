@@ -31,7 +31,7 @@ const signup = async (req, res) => {
         _id: savedUser["_doc"]["_id"],
       },
       JWT_SECRET,
-      { expiresIn: "3h" },
+      { expiresIn: "8h" },
     );
     res.cookie("DMUM-token", token, { httpOnly: true });
     res.cookie("DMUM-authenticated", true);
