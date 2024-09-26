@@ -33,7 +33,7 @@ Pour répondre au cahier des charges, j'ai choisi d'utiliser la stack **MEAN** (
 ### Lancement du site en local
 Pour lancer le site, se rendre à la racine du projet, ajouter un fichier _.env_ en renseignant les informations suivantes :
 ```
-URL = <url du site> (ex: http://localhost:4200)
+URL = <url du serveur de développement angular> (ex: http://localhost:4200)
 SERVER_PORT = <port du serveur expressJS> (ex: 3000)
 MONGODB_URI = <identifiant de connexion à la base de données avec nom de la base de données> (ex : mongodb://localhost:27017/dmum-db)
 JWT_SECRET = <clé secrète pour les tokens>
@@ -52,7 +52,7 @@ Ensuite, se rendre à la racine et exécuter la commande suivante :
 npm install
 npm start
 ```
-**ATTENTION :** Si vous utilisez un port différent du port 3000 pour le serveur, vous devrez modifier les valeurs contenues dans le répertoire _/src/environments/environment.ts_. 
+**ATTENTION :** Si vous utilisez un port différent du port 3000 pour le serveur, vous devrez modifier les valeurs contenues dans le répertoire _/src/environments/environment.development.ts_. 
 Si tout se passe correctement, le site devrait s'afficher en se rendant à l'adresse : http://localhost:4200/.
 
 ### Utilisation du site
