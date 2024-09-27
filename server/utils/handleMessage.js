@@ -12,13 +12,13 @@ const handleMessage = async (data) => {
   if (!chatCommand) return formatMessage(chatMessage, user);
 
   if (chatMessage.startsWith("/d")) {
-    const word = chatMessage.split(" ")[1]?.toLowerCase();
+    const word = chatMessage.split(" ")?.slice(1)?.join(" ")?.toLowerCase();
     if (!word) return formatMessage(chatMessage, user);
     return await launchGame(user, word);
   }
 
   if (chatMessage.startsWith("/w")) {
-    const word = chatMessage.split(" ")[1]?.toLowerCase();
+    const word = chatMessage.split(" ")?.slice(1)?.join(" ")?.toLowerCase();
     if (!word) return formatMessage(chatMessage, user);
     return await checkWord(user, word);
   }
