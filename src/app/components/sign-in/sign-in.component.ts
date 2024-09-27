@@ -9,10 +9,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -35,6 +36,7 @@ export class SignInComponent {
   userService = inject(UserService);
   signInFormBuilder = new FormBuilder().nonNullable;
 
+  snackBarRef?: MatSnackBarRef<NotificationComponent>;
   durationInSeconds = 3;
   errorMessage = '';
 
@@ -65,12 +67,25 @@ export class SignInComponent {
   }
 
   notify(message: string) {
-    this.snackBar.openFromComponent(NotificationComponent, {
+    this.snackBarRef = this.snackBar.openFromComponent(NotificationComponent, {
       data: { message },
       duration: this.durationInSeconds * 1000,
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
     });
+
+    this.snackBarRef
+      .afterDismissed()
+      .pipe(take(1))
+      .subscribe(() => {
+        this.snackBar
+          .open('Vous êtes connecté(e)', 'Se déconnecter')
+          .afterDismissed()
+          .pipe(take(1))
+          .subscribe(async () => {
+            await this.authService.logout();
+          });
+      });
   }
 
   get email() {

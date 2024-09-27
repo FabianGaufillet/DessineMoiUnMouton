@@ -14,6 +14,8 @@ import { GameComponent } from '../game/game.component';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../../services/user.service';
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login-tabs',
@@ -32,8 +34,10 @@ import { LeaderboardComponent } from '../leaderboard/leaderboard.component';
 export class LoginTabsComponent implements OnInit, AfterViewInit {
   cookieService: CookieService = inject(CookieService);
   userService = inject(UserService);
-  @ViewChild('tabGroup') tabGroup!: MatTabGroup;
+  snackBar = inject(MatSnackBar);
   authService = inject(AuthService);
+
+  @ViewChild('tabGroup') tabGroup!: MatTabGroup;
   userConnected = false;
   data = [];
 
@@ -41,12 +45,24 @@ export class LoginTabsComponent implements OnInit, AfterViewInit {
     effect(() => {
       this.userConnected = this.authService.isLoggedIn();
       if (this.userConnected) this.tabGroup.selectedIndex = 3;
+      else this.tabGroup.selectedIndex = 0;
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.cookieService.check('DMUM-authenticated')) {
-      this.reconnect();
+      try {
+        await this.reconnect();
+        this.snackBar
+          .open('Vous êtes connecté(e)', 'Se déconnecter')
+          .afterDismissed()
+          .pipe(take(1))
+          .subscribe(async () => {
+            await this.authService.logout();
+          });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 

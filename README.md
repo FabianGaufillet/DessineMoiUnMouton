@@ -28,7 +28,7 @@ Le jeu contient un **mécanisme de score**. Le score de chaque joueur est enregi
 
 ## Réalisation
 ### Stack technique
-Pour répondre au cahier des charges, j'ai choisi d'utiliser la stack **MEAN** (MongoDB, ExpressJS, Angular, NodeJS).
+Pour répondre au cahier des charges, j'ai choisi d'utiliser la stack **MEAN** (MongoDB, ExpressJS, Angular, NodeJS) ainsi que Socket.IO pour la gestion des websockets.
 
 ### Lancement du site en local
 Pour lancer le site, se rendre à la racine du projet, ajouter un fichier _.env_ en renseignant les informations suivantes :

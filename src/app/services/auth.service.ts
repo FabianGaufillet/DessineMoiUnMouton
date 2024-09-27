@@ -69,4 +69,18 @@ export class AuthService {
       return Promise.reject(new Error(err.error.message));
     }
   }
+
+  async logout() {
+    try {
+      const response = await firstValueFrom(
+        this.http.post(`${this.apiUrl}/logout`, '', {
+          withCredentials: true,
+        }),
+      );
+      this.isLoggedIn.set(false);
+      return response;
+    } catch (err: any) {
+      return Promise.reject(new Error(err.error.message));
+    }
+  }
 }
