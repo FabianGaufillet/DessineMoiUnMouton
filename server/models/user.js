@@ -46,6 +46,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Chiffrement du mot de passe avant enregistrement en base de données
 UserSchema.pre("save", function (next) {
   const user = this;
 

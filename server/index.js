@@ -13,6 +13,8 @@ const __dirname = import.meta.dirname;
 const app = express();
 
 app.use(cors({ origin: URL, credentials: true }));
+
+// Fichiers statiques à servir pour Angular
 app.use(
   express.static(
     path.join(__dirname, "/../dist/dessine-moi-un-mouton/browser"),
@@ -25,10 +27,13 @@ app.use(cookieParser());
 const start = async () => {
   try {
     mongoose.set("strictQuery", true);
+
+    // Connexion à la base de données
     await mongoose.connect(MONGODB_URI);
 
     app.use("/api/user", user);
 
+    // Redirection des requêtes vers "index.html" pour le routage Angular
     app.get("*", (req, res) => {
       res.sendFile(
         path.join(
@@ -42,6 +47,7 @@ const start = async () => {
       res.status(error.status).json(error);
     });
 
+    // Démarrage du serveur
     return app.listen({ port: SERVER_PORT }, () => {
       console.log(`Server started on port ${SERVER_PORT}`);
     });
@@ -52,6 +58,8 @@ const start = async () => {
 
 (async () => {
   const server = await start();
+
+  // Connexion websockets
   const io = new Server(server, {
     cors: { origin: URL },
   });
@@ -60,6 +68,7 @@ const start = async () => {
   let intervalID = null;
   let drawer = null;
 
+  // Gestion du démarrage d'une partie
   const startNewGame = async (gameDrawer) => {
     remainingTime = gameDuration;
     drawer = gameDrawer;
@@ -75,6 +84,7 @@ const start = async () => {
     }, 1000);
   };
 
+  // Gestion de la fin de partie
   const stopCurrentGame = async () => {
     clearInterval(intervalID);
     drawer = null;
@@ -92,6 +102,7 @@ const start = async () => {
     });
   };
 
+  // Définition des actions à réaliser à la réception d'un message
   const onChat = async (data) => {
     try {
       const result = await handleMessage(data);

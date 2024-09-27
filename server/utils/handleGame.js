@@ -3,6 +3,12 @@ import { User } from "../models/user.js";
 
 const gameDuration = 180;
 
+/*
+  Lancement de la partie si les conditions sont réunies
+  - Une partie a le statut "waiting"
+  - Une autre partie n'est pas déjà en cours
+  - Il y a au moins un joueur autre que le dessinateur
+*/
 const launchGame = async (user, word) => {
   try {
     let games = await Game.find(
@@ -59,6 +65,11 @@ const launchGame = async (user, word) => {
   }
 };
 
+/*
+  Un joueur souhaite participer à la prochaine partie
+  - Si elle n'existe pas encore, elle est créée
+  - Sinon, il est ajouté à la liste des participants
+*/
 const joinGame = async (user) => {
   try {
     const game = await Game.findOne({ status: "waiting" }, {}, {});
@@ -88,6 +99,13 @@ const joinGame = async (user) => {
   }
 };
 
+/*
+  Un joueur a proposé un mot. On lui attribue des points si :
+  - il y a une partie en cours
+  - il fait partie de la liste des participants à la partie en cours
+  - le mot proposé correspond à celui recherché
+  - il ne fait pas déjà partie de la liste des gagnants
+*/
 const checkWord = async (user, word) => {
   try {
     const game = await Game.findOne(
@@ -134,6 +152,9 @@ const checkWord = async (user, word) => {
   }
 };
 
+/*
+  Désinscription d'un joueur
+*/
 const leaveGame = async (user) => {
   try {
     const game = await Game.findOne(
@@ -159,6 +180,11 @@ const leaveGame = async (user) => {
   }
 };
 
+/*
+  Arrêt de la partie en cours
+  - Soit tous les joueurs ont trouvé le mot
+  - Soit le temps est écoulé
+*/
 const stopGame = async () => {
   try {
     const game = await Game.findOne({ status: "inProgress" }, {}, {});

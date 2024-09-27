@@ -1,5 +1,8 @@
 import { checkWord, joinGame, launchGame, leaveGame } from "./handleGame.js";
 
+/*
+  Gestion des messages envoyés dans le tchat
+*/
 const handleMessage = async (data) => {
   const commands = ["/d", "/j", "/q", "/w"];
   const chatMessage = data["chatMessage"];
