@@ -17,7 +17,7 @@ router.post("/signup", ...userSignUpValidator, validate, signup);
 router.post("/signin", signin);
 router.post("/reconnect", reconnect);
 router.put("/update", authentication, ...userSignUpValidator, validate, update);
-router.get("/logout", logout);
+router.post("/logout", logout);
 router.delete("/", authentication, remove);
 
 export { router };

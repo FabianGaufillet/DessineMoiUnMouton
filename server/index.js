@@ -60,40 +60,53 @@ const start = async () => {
   let intervalID = null;
   let drawer = null;
 
-  const onChat = async (data) => {
-    const result = await handleMessage(data);
-    if (result.action === "launchGame" && !intervalID) {
-      remainingTime = gameDuration;
-      drawer = result.drawer;
-      intervalID = setInterval(async () => {
-        io.emit("remainingTime", remainingTime--);
-        if (remainingTime === 0) {
-          clearInterval(intervalID);
-          drawer = null;
-          intervalID = null;
-          await stopGame();
-          io.emit("chat", {
-            message: "Partie terminée les loulous. Merci aux participants !",
-            class: "bot",
-          });
+  const startNewGame = async (gameDrawer) => {
+    remainingTime = gameDuration;
+    drawer = gameDrawer;
+    intervalID = setInterval(async () => {
+      io.emit("remainingTime", remainingTime--);
+      if (remainingTime === 0) {
+        try {
+          await stopCurrentGame();
+        } catch (err) {
+          console.error(err);
         }
-      }, 1000);
-    } else if (result.action === "stopGame") {
-      clearInterval(intervalID);
-      drawer = null;
-      intervalID = null;
-      remainingTime = 0;
+      }
+    }, 1000);
+  };
+
+  const stopCurrentGame = async () => {
+    clearInterval(intervalID);
+    drawer = null;
+    intervalID = null;
+    remainingTime = 0;
+    try {
       await stopGame();
-      io.emit("remainingTime", remainingTime);
-      io.emit("chat", {
-        message: "Partie terminée les loulous. Merci aux participants !",
-        class: "bot",
-      });
+    } catch (err) {
+      console.error(err);
     }
+    io.emit("remainingTime", remainingTime);
     io.emit("chat", {
-      message: result.message,
-      class: result.class,
+      message: "Partie terminée les loulous. Merci aux participants !",
+      class: "bot",
     });
+  };
+
+  const onChat = async (data) => {
+    try {
+      const result = await handleMessage(data);
+      if (result.action === "launchGame" && !intervalID) {
+        await startNewGame(result.drawer);
+      } else if (result.action === "stopGame") {
+        await stopCurrentGame();
+      }
+      io.emit("chat", {
+        message: result.message,
+        class: result.class,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   io.on("connection", (socket) => {
